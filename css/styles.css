@@ -1,0 +1,273 @@
+:root {
+    --purple-dark: #550069;
+    --purple-medium: #6c0d82;
+    --purple-light: rgba(108, 13, 130, 0.3);
+    --gray-light: #b8b8b8;
+    --white: #fffcff;
+    --glass: rgba(255, 252, 255, 0.1);
+}
+
+body {
+    background-color: #000;
+    color: var(--white);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+#video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: blur(10px) brightness(0.7);
+}
+
+#intro {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    opacity: 1;
+    transition: opacity 1s ease;
+    cursor: pointer;
+}
+
+.intro-content {
+    text-align: center;
+    position: relative;
+}
+
+.intro-text {
+    font-size: 5rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, var(--purple-medium), var(--white));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 20px var(--purple-light);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.subtext {
+    font-size: 1.5rem;
+    color: var(--gray-light);
+    margin-top: 1rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 1s ease-out 0.5s forwards;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px var(--purple-light);
+    }
+    to {
+        text-shadow: 0 0 30px var(--purple-medium);
+    }
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#intro.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#main-content {
+    opacity: 0;
+    transition: opacity 1.5s ease;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#main-content.hidden {
+    display: none;
+}
+
+#main-content.show {
+    opacity: 1;
+}
+
+.profiles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.profile {
+    margin: 1rem;
+    text-align: center;
+    color: var(--white);
+    transition: all 0.5s ease;
+    background: var(--glass);
+    padding: 2rem 3rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+.profile img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--glass);
+    transition: all 0.5s ease;
+    box-shadow: 0 0 20px var(--purple-light);
+}
+
+.profile:hover img {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px var(--purple-medium);
+}
+
+.profile h2 {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.8rem;
+    color: var(--white);
+}
+
+.profile p {
+    color: var(--gray-light);
+    margin-bottom: 1rem;
+}
+
+.badges {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.badges img {
+    width: 25px;
+    height: 25px;
+    transition: all 0.3s;
+}
+
+.badges img:hover {
+    transform: scale(1.2);
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.social-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--purple-medium);
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(108, 13, 130, 0.5);
+}
+
+.social-button:hover {
+    transform: scale(1.1) translateY(-5px);
+    box-shadow: 0 0 25px rgba(108, 13, 130, 0.8);
+}
+
+.social-button i {
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+}
+
+.tooltip {
+    position: absolute;
+    top: -40px;
+    background: var(--purple-dark);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.social-button:hover .tooltip {
+    opacity: 1;
+    transform: translateY(-5px);
+}
+
+#volume-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+#volume-icon {
+    color: var(--white);
+    font-size: 1.5rem;
+    margin-right: 10px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+#volume-control {
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+#volume-container:hover #volume-control {
+    width: 120px;
+    opacity: 1;
+}
+
+#volume-container:hover #volume-icon {
+    transform: scale(1.1);
+}
+
+#volume-slider {
+    width: 100%;
+    cursor: pointer;
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
