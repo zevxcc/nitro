@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>!2Dfxx</title>
+<link rel="icon" type="image/png" href="https://static-00.iconduck.com/assets.00/firefox-developer-icon-1909x2048-l6oqiz3z.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --purple-dark: #550069;
+  --purple-medium: #6c0d82;
+  --purple-light: rgba(108, 13, 130, 0.3);
+  --gray-light: #b8b8b8;
+  --white: #fffcff;
+  --glass: rgba(255, 252, 255, 0.1);
+}
+
+body {
+  background-color: #000;
+  color: var(--white);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: blur(10px) brightness(0.7);
+}
+
+#intro {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  opacity: 1;
+  transition: opacity 1s ease;
+  cursor: pointer;
+}
+
+.intro-content {
+  text-align: center;
+  position: relative;
+}
+
+.intro-text {
+  font-size: 5rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, var(--purple-medium), var(--white));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 20px var(--purple-light);
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+.subtext {
+  font-size: 1.5rem;
+  color: var(--gray-light);
+  margin-top: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease-out 0.5s forwards;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px var(--purple-light);
+  }
+  to {
+    text-shadow: 0 0 30px var(--purple-medium);
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#intro.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#main-content {
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#main-content.hidden {
+  display: none;
+}
+
+#main-content.show {
+  opacity: 1;
+}
+
+.profiles {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.profile {
+  margin: 1rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--white);
+  transition: all 0.5s ease;
+  background: var(--glass);
+  padding: 2rem 3rem;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  width: 300px;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+
+.profile img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--glass);
+  transition: all 0.5s ease;
+  box-shadow: 0 0 20px var(--purple-light);
+}
+
+.profile:hover img {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px var(--purple-medium);
+}
+
+.profile h2 {
+  margin: 1rem 0 0.5rem;
+  font-size: 1.8rem;
+  color: var(--white);
+}
+
+.profile p {
+  color: var(--gray-light);
+  margin-bottom: 1rem;
+}
+
+.badges {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.badges img {
+  width: 25px;
+  height: 25px;
+  transition: all 0.3s;
+}
+
+.badges img:hover {
+  transform: scale(1.2);
+}
+
+#volume-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+#volume-icon {
+  color: var(--white);
+  font-size: 1.5rem;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+#volume-control {
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+#volume-container:hover #volume-control {
+  width: 120px;
+  opacity: 1;
+}
+
+#volume-container:hover #volume-icon {
+  transform: scale(1.1);
+}
+
+#volume-slider {
+  width: 100%;
+  cursor: pointer;
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+</style>
+</head>
+<body>
+<div id="intro">
+  <div class="intro-content">
+    <div class="intro-text">!2Dfxx</div>
+    <div class="subtext">Clique para entrar</div>
+  </div>
+</div>
+
+<div id="main-content" class="hidden">
+  <div id="volume-container">
+    <i id="volume-icon" class="fas fa-volume-up"></i>
+    <div id="volume-control">
+      <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+    </div>
+  </div>
+  
+  <main>
+    <section class="profiles">
+      <a href="https://discord.com/users/1336029650207506542" class="profile card" id="interactive-card">
+        <img src="https://media.discordapp.net/attachments/1356045739008196758/1356045786655363092/2D.png?ex=6816a50d&is=6815538d&hm=8ee1085dc6307286114692c916082678e46fb8483ff8fd1b1fa5531dfe745042&=&format=webp&quality=lossless&width=630&height=450" alt="Profile Picture">
+        <h2>!2Dfxx</h2>
+        <p><i class="fa-solid fa-terminal"></i> <i class="fa-solid fa-equals"></i> <i class="fa-solid fa-dove"></i></p>
+        <div class="badges">
+          <img src="media/badge2.png" alt="Badge">
+          <img src="media/badge3.png" alt="Badge">
+          <img src="media/badge4.png" alt="Badge">
+        </div>
+      </a>
+    </section>
+  </main>
+  
+  <audio id="music" src="media/musica.mp3" preload="auto" loop></audio>
+  <video id="video-background" autoplay loop muted>
+    <source src="media/vídeo.mp4" type="video/mp4">
+    Seu navegador não suporta a tag de vídeo.
+  </video>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const intro = document.getElementById("intro");
+  const mainContent = document.getElementById("main-content");
+  const music = document.getElementById("music");
+  const volumeSlider = document.getElementById("volume-slider");
+  const volumeIcon = document.getElementById("volume-icon");
+  const card = document.getElementById("interactive-card");
+  
+  music.volume = volumeSlider.value;
+  
+  volumeSlider.addEventListener("input", function() {
+    music.volume = this.value;
+    if (this.value == 0) {
+      volumeIcon.className = "fas fa-volume-mute";
+    } else if (this.value < 0.5) {
+      volumeIcon.className = "fas fa-volume-down";
+    } else {
+      volumeIcon.className = "fas fa-volume-up";
+    }
+  });
+  
+  volumeIcon.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (music.volume > 0) {
+      volumeSlider.value = 0;
+      music.volume = 0;
+      volumeIcon.className = "fas fa-volume-mute";
+    } else {
+      volumeSlider.value = 0.5;
+      music.volume = 0.5;
+      volumeIcon.className = "fas fa-volume-up";
+    }
+  });
+  
+  intro.addEventListener("click", function() {
+    intro.classList.add("fade-out");
+    mainContent.classList.remove("hidden");
+    setTimeout(function() {
+      mainContent.classList.add("show");
+      music.play().catch(e => console.log("Autoplay prevented:", e));
+    }, 500);
+  });
+  
+  const titles = ["</>", "!", "!2", "!2D", "!2Df", "!2Dfx", "!2Dfxx"];
+  let index = 0;
+  setInterval(function() {
+    document.title = titles[index];
+    index = (index + 1) % titles.length;
+  }, 400);
+  
+  document.addEventListener('click', function() {
+    if (music.paused) {
+      music.play().catch(e => console.log("Play prevented:", e));
+    }
+  }, { once: true });
+  
+  card.addEventListener('mousemove', function(e) {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const xAxis = (centerX - x) / 25;
+    const yAxis = (centerY - y) / 25;
+    
+    card.style.transform = `
+      perspective(600px)
+      rotateX(${yAxis}deg)
+      rotateY(${xAxis}deg)
+      scale(1.03)
+    `;
+    card.style.boxShadow = `
+      ${-xAxis}px ${-yAxis}px 40px rgba(0, 0, 0, 0.4)
+    `;
+  });
+  
+  card.addEventListener('mouseleave', function() {
+    card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale(1)';
+    card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+  });
+});
+</script>
+</body>
+</html>
