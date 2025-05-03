@@ -61,89 +61,88 @@
     </div>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const intro = document.getElementById("intro");
-        const mainContent = document.getElementById("main-content");
-        const music = document.getElementById("music");
-        const volumeSlider = document.getElementById("volume-slider");
-        const volumeIcon = document.getElementById("volume-icon");
-        const card = document.getElementById("interactive-card");
+document.addEventListener("DOMContentLoaded", function() {
+    const intro = document.getElementById("intro");
+    const mainContent = document.getElementById("main-content");
+    const music = document.getElementById("music");
+    const volumeSlider = document.getElementById("volume-slider");
+    const volumeIcon = document.getElementById("volume-icon");
+    const card = document.getElementById("interactive-card");
+    
+    music.volume = volumeSlider.value;
         
-        music.volume = volumeSlider.value;
-        
-        volumeSlider.addEventListener("input", function() {
-            music.volume = this.value;
-            if (this.value == 0) {
-                volumeIcon.className = "fas fa-volume-mute";
-            } else if (this.value < 0.5) {
-                volumeIcon.className = "fas fa-volume-down";
-            } else {
-                volumeIcon.className = "fas fa-volume-up";
-            }
-        });
-        
-        volumeIcon.addEventListener("click", function(e) {
-            e.stopPropagation();
-            if (music.volume > 0) {
-                volumeSlider.value = 0;
-                music.volume = 0;
-                volumeIcon.className = "fas fa-volume-mute";
-            } else {
-                volumeSlider.value = 0.5;
-                music.volume = 0.5;
-                volumeIcon.className = "fas fa-volume-up";
-            }
-        });
-        
-        intro.addEventListener("click", function() {
-            intro.classList.add("fade-out");
-            mainContent.classList.remove("hidden");
-            setTimeout(function() {
-                mainContent.classList.add("show");
-                music.play().catch(e => console.log("Autoplay prevented:", e));
-            }, 500);
-        });
-        
-        const titles = ["</>", "!", "!2", "!2D", "!2Df", "!2Dfx", "!2Dfxx"];
-        let index = 0;
-        setInterval(function() {
-            document.title = titles[index];
-            index = (index + 1) % titles.length;
-        }, 400);
-        
-        document.addEventListener('click', function() {
-            if (music.paused) {
-                music.play().catch(e => console.log("Play prevented:", e));
-            }
-        }, { once: true });
-        
-        card.addEventListener('mousemove', function(e) {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            
-            const xAxis = (centerX - x) / 25;
-            const yAxis = (centerY - y) / 25;
-            
-            card.style.transform = `
-                perspective(600px)
-                rotateX(${yAxis}deg)
-                rotateY(${xAxis}deg)
-                scale(1.03)
-            `;
-            card.style.boxShadow = `
-                ${-xAxis}px ${-yAxis}px 40px rgba(0, 0, 0, 0.4)
-            `;
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale(1)';
-            card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
-        });
+    volumeSlider.addEventListener("input", function() {
+        music.volume = this.value;
+        if (this.value == 0) {
+            volumeIcon.className = "fas fa-volume-mute";
+        } else if (this.value < 0.5) {
+            volumeIcon.className = "fas fa-volume-down";
+        } else {
+            volumeIcon.className = "fas fa-volume-up";
+        }
     });
+        
+    volumeIcon.addEventListener("click", function(e) {
+        e.stopPropagation();
+        if (music.volume > 0) {
+            volumeSlider.value = 0;
+            music.volume = 0;
+            volumeIcon.className = "fas fa-volume-mute";
+        } else {
+            volumeSlider.value = 0.5;
+            music.volume = 0.5;
+            volumeIcon.className = "fas fa-volume-up";
+        }
+    });
+        
+    intro.addEventListener("click", function() {
+        intro.classList.add("fade-out");
+        mainContent.classList.remove("hidden");
+        setTimeout(function() {
+            mainContent.classList.add("show");
+            music.play().catch(e => console.log("Autoplay prevented:", e));
+        }, 500);
+    });
+        
+    const titles = ["</>", "!", "!2", "!2D", "!2Df", "!2Dfx", "!2Dfxx"];
+    let index = 0;
+    setInterval(function() {
+        document.title = titles[index];
+        index = (index + 1) % titles.length;
+    }, 300);
+        
+    document.addEventListener('click', function() {
+        if (music.paused) {
+            music.play().catch(e => console.log("Play prevented:", e));
+        }
+    }, { once: true });
+        
+    card.addEventListener('mousemove', function(e) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const xAxis = (x - centerX) / 25;
+        const yAxis = (y - centerY) / 25;
+        
+        card.style.transform = `
+            perspective(600px)
+            rotateX(${yAxis}deg)
+            rotateY(${xAxis}deg)
+            scale(1.03)
+        `;
+        card.style.boxShadow = `
+            ${-xAxis}px ${-yAxis}px 40px rgba(0, 0, 0, 0.4)
+        `;
+    });
+            card.addEventListener('mouseleave', function() {
+        card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale(1)';
+        card.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+    });
+});
     </script>
 </body>
 </html>
