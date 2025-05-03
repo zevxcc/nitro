@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const centerY = rect.height / 2;
         
         const xAxis = (x - centerX) / 25;
-        const yAxis = (y - centerY) / 25;
+        const yAxis = -(y - centerY) / 25;
         
         card.style.transform = `
             perspective(600px)
