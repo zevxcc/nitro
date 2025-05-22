@@ -1,0 +1,247 @@
+<!DOCTYPE html><html lang="pt"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificação</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, #1a1a2e, #16213e);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      flex-direction: column;
+      animation: fadeToRed 3s ease-in-out forwards;
+    }
+
+    /* @keyframes fadeToRed {
+      0% {
+        background: linear-gradient(to bottom right, #1a1a2e, #16213e);
+      }
+
+      100% {
+        background: linear-gradient(to bottom right, #4a1a1a, #7a2525);
+      }
+    } */
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
+      box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .hidden {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .server-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      margin-bottom: 15px;
+      object-fit: cover;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 10px;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, #00ffcc, #00ff88);
+      transition: width 0.3s ease-in-out;
+    }
+
+    .sucess-message {
+      background: rgba(0, 0, 0, 0,8);
+      border: 1px solid rgba(0, 0, 0, 0,8);
+      color: #85f748;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      display: none;
+      text-align: left;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 400px;
+      animation: sucessMessage 0.5s ease-in-out;
+    }
+
+    @keyframes sucessMessage {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .sucess-message span {
+      font-size: 22px;
+    }
+
+    .sucess-text {
+      display: none;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #85f748;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.3s ease-in-out;
+      cursor: pointer;
+      border: none;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+
+    .button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .arrow {
+      margin-right: 6px;
+      font-size: 16px;
+      transition: transform 0.3s;
+    }
+
+    .button:hover .arrow {
+      transform: translateX(-5px);
+    }
+
+    footer {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #bdbdbd;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Mensagem de erro -->
+  <div class="sucess-message" id="sucessMessage">
+    <span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m15 9-6 6"></path>
+        <path d="m9 9 6 6"></path>
+      </svg>
+    </span>
+    <div>
+      <strong>Verificação Sucedida</strong>
+      <p style="font-size: 14px;">A verificar foi Sucedida na sua conta.</p>
+    </div>
+  </div>
+
+  <div class="container hidden" id="verificationContainer">
+    <img id="serverIcon" class="server-icon" src="images/logo.png" alt="Server Icon">
+    <h2 id="statusText">Verificando...</h2>
+
+    <p id="sucessText" class="sucess-text"Verificação Sucedida</p>
+
+    <p id="progressText">0%</p>
+
+    <div class="progress-bar" id="progressContainer">
+      <div class="progress" id="progressBar"></div>
+    </div>
+
+    <button class="button" id="retryButton" style="display: none;">
+      <span class="arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
+          <path d="m12 19-7-7 7-7"></path>
+          <path d="M19 12H5"></path>
+        </svg>
+      </span>
+      Voltar ao Servidor
+    </button>
+  </div>
+
+  <!-- Rodapé -->
+  <footer>
+    Feito por <strong>7M Vazamentos / Rzw`</strong></strong>
+  </footer>
+
+  <script type="a44a35afdef6cc15ed575607-text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+      const container = document.getElementById("verificationContainer");
+      const progressBar = document.getElementById("progressBar");
+      const progressText = document.getElementById("progressText");
+      const progressContainer = document.getElementById("progressContainer");
+      const statusText = document.getElementById("statusText");
+      const errorMessage = document.getElementById("sucessMessage");
+      const retryButton = document.getElementById("retryButton");
+      const errorText = document.getElementById("sucessText");
+
+      let progress = 0;
+
+      setTimeout(() => {
+        container.classList.remove("hidden");
+      }, 300);
+
+      const interval = setInterval(() => {
+        progress += 2;
+        progressBar.style.width = progress + "%";
+        progressText.textContent = progress + "%";
+
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            errorMessage.style.display = "flex";
+            statusText.textContent = "Verificação Sucedida!";
+            progressText.style.display = "none";
+            progressContainer.style.opacity = "0";
+            errorText.style.display = "block";
+            retryButton.style.display = "inline-flex";
+          }, 500);
+        }
+      }, 150);
+    });
+  </script>
+
+<script src="js/rocket-loader.min.js" data-cf-settings="a44a35afdef6cc15ed575607-|49" defer=""></script><script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" data-cf-beacon="{" rayid":"94029a81ddf98f37","servertiming":{"name":{"cfextpri":true,"cfl4":true,"cfspeedbrain":true,"cfcachestatus":true}},"version":"2025.4.0-1-g37f21b1","token":"318d05e15f0246efa8397e46589e666e"}"="" crossorigin="anonymous"></script>
+
+
+
+</body></html>
